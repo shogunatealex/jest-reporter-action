@@ -9,6 +9,7 @@ const main = async () => {
   const testCommand = core.getInput("test-command") || "npx jest";
 
   const githubClient = new GitHub(githubToken);
+  console.log(githubClient);
   const commitPRs = await githubClient.repos.listPullRequestsAssociatedWithCommit(
     {
       repo: repoName,
@@ -16,6 +17,7 @@ const main = async () => {
       commit_sha: context.sha
     }
   );
+  console.log(prNumber);
   const prNumber = commitPRs.data[0].number;
 
   const codeCoverage = execSync(testCommand).toString();
