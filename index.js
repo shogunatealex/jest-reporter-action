@@ -8,31 +8,16 @@ const main = async () => {
   const githubToken = core.getInput("github-token");
   const testCommand = core.getInput("test-command") || "npx jest";
 
-  console.log(context.ref);
-  console.log('-------')
-  console.log(process.env.GITHUB_REF);
-  console.log("-------")
-  const githubClient = new GitHub(githubToken);
-  console.log(githubToken);
-  console.log("-------");
-  console.log(testCommand);
-  console.log("--------");
-  console.log(githubClient);
-  console.log("---------");
-  console.log(context.sha);
-  console.log("---------");
-  const commitPRs = await githubClient.repos.listPullRequestsAssociatedWithCommit(
-    {
-      repo: repoName,
-      owner: repoOwner,
-      commit_sha: context.sha
-    }
-  );
-  
-  
-  console.log(commitPRs);
+  const parsePullRequestId = githubRef => {
+    const result = /refs\/pull\/(\d+)\/merge/g.exec(githubRef);
+    if (!result) throw new Error("Reference not found.");
+    const [, pullRequestId] = result;
+    return pullRequestId;
+  };
 
-  const prNumber = commitPRs.data[0].number;
+  var prNumber = parsePullRequestId(context.ref)
+
+  console.log(prNumber);
 
   const codeCoverage = execSync(testCommand).toString();
   let coveragePercentage = execSync(
@@ -46,6 +31,8 @@ const main = async () => {
 <pre>${codeCoverage}</pre>
 </p>
 </details>`;
+
+  const githubClient = new GitHub(githubToken);
 
   await githubClient.issues.createComment({
     repo: repoName,
