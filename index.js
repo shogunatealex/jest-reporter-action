@@ -17,7 +17,14 @@ const main = async () => {
       commit_sha: context.sha
     }
   );
-  console.log(prNumber);
+  
+  await githubClient.issues.createComment({
+    repo: repoName,
+    owner: repoOwner,
+    body: "test",
+    issue_number: commitPRs,
+  });
+  
   const prNumber = commitPRs.data[0].number;
 
   const codeCoverage = execSync(testCommand).toString();
