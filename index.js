@@ -23,12 +23,6 @@ const main = async () => {
     }
   );
   
-  await githubClient.issues.createComment({
-    repo: repoName,
-    owner: repoOwner,
-    body: "test",
-    issue_number: commitPRs,
-  });
   
   console.log(commitPRs);
 
