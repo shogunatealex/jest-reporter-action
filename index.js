@@ -15,6 +15,8 @@ const main = async () => {
   console.log("--------");
   console.log(githubClient);
   console.log("---------");
+  console.log(context.sha);
+  console.log("---------");
   const commitPRs = await githubClient.repos.listPullRequestsAssociatedWithCommit(
     {
       repo: repoName,
