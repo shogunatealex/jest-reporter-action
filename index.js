@@ -8,6 +8,10 @@ const main = async () => {
   const githubToken = core.getInput("github-token");
   const testCommand = core.getInput("test-command") || "npx jest";
 
+  console.log(context.ref);
+  console.log('-------')
+  console.log(process.env.GITHUB_REF);
+  console.log("-------")
   const githubClient = new GitHub(githubToken);
   console.log(githubToken);
   console.log("-------");
